@@ -1,8 +1,0 @@
-<%= if is_nil(@uploaded_recording) do %>
-  <form id="upload-form" phx-submit="save" phx-change="validate">
-    <label for={@uploads.recording.ref}>Upload interview</label>
-    <.live_file_input upload={@uploads.recording} /> <button type="submit">Upload</button>
-  </form>
-<% else %>
-  <.link href={@uploaded_recording}>Report</.link>
-<% end %>
