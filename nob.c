@@ -3,11 +3,11 @@
 
 #define BUILD_FOLDER "build/"
 #define SRC_FOLDER   "src/"
-#define VENDOR_FOLDER "vendor/"
+#define THIRDPARTY_FOLDER "thirdparty/"
 
 bool build_whisper() {
     bool result = true;
-    nob_set_current_dir(VENDOR_FOLDER"whisper.cpp");
+    nob_set_current_dir(THIRDPARTY_FOLDER"whisper.cpp");
     Nob_Cmd cmd = {0};
     nob_cmd_append(&cmd, "cmake", "-B", "build");
     nob_cmd_append(&cmd, "-DWHISPER_BUILD_TESTS=0", "-DWHISPER_BUILD_EXAMPLES=0", "-DWHISPER_BUILD_SERVER=0");
@@ -16,9 +16,9 @@ bool build_whisper() {
     nob_cmd_append(&cmd, "cmake", "--build", "build", "-j", "--config", "Release");
     if (!nob_cmd_run(&cmd)) nob_return_defer(false);
     nob_set_current_dir("../..");
-    nob_copy_file(VENDOR_FOLDER"whisper.cpp/build/src/libwhisper.so", BUILD_FOLDER"libwhisper.so");
-    nob_copy_file(VENDOR_FOLDER"whisper.cpp/build/src/libwhisper.so.1", BUILD_FOLDER"libwhisper.so.1");
-    nob_copy_file(VENDOR_FOLDER"whisper.cpp/build/src/libwhisper.so.1.8.4", BUILD_FOLDER"libwhisper.so.1.8.4");
+    nob_copy_file(THIRDPARTY_FOLDER"whisper.cpp/build/src/libwhisper.so", BUILD_FOLDER"libwhisper.so");
+    nob_copy_file(THIRDPARTY_FOLDER"whisper.cpp/build/src/libwhisper.so.1", BUILD_FOLDER"libwhisper.so.1");
+    nob_copy_file(THIRDPARTY_FOLDER"whisper.cpp/build/src/libwhisper.so.1.8.4", BUILD_FOLDER"libwhisper.so.1.8.4");
 
     defer:
         cmd_free(cmd);
@@ -27,7 +27,7 @@ bool build_whisper() {
 
 bool build_llama() {
     bool result = true;
-    nob_set_current_dir(VENDOR_FOLDER"llama.cpp");
+    nob_set_current_dir(THIRDPARTY_FOLDER"llama.cpp");
     Nob_Cmd cmd = {0};
     nob_cmd_append(&cmd, "cmake", "-B", "build");
     nob_cmd_append(&cmd, "-DLLAMA_BUILD_COMMON=0");
@@ -37,12 +37,12 @@ bool build_llama() {
 
     nob_set_current_dir("../..");
     Nob_File_Paths children = {0};
-    if (!nob_read_entire_dir(VENDOR_FOLDER"llama.cpp/build/bin", &children)) nob_return_defer(false);
+    if (!nob_read_entire_dir(THIRDPARTY_FOLDER"llama.cpp/build/bin", &children)) nob_return_defer(false);
     for (size_t i = 0; i < children.count; ++i) {
         if (strcmp(children.items[i], ".") == 0) continue;
         if (strcmp(children.items[i], "..") == 0) continue;
 
-        if (!nob_copy_file(nob_temp_sprintf(VENDOR_FOLDER"llama.cpp/build/bin/%s", children.items[i]), nob_temp_sprintf(BUILD_FOLDER"%s", children.items[i]))) nob_return_defer(false);
+        if (!nob_copy_file(nob_temp_sprintf(THIRDPARTY_FOLDER"llama.cpp/build/bin/%s", children.items[i]), nob_temp_sprintf(BUILD_FOLDER"%s", children.items[i]))) nob_return_defer(false);
     }
 
     defer:
@@ -80,10 +80,10 @@ int main(int argc, char **argv) {
     nob_cc(&cmd);
     nob_cc_flags(&cmd);
     nob_cmd_append(&cmd, "-c");
-    nob_cmd_append(&cmd, "-Ivendor/whisper.cpp/include");
-    nob_cmd_append(&cmd, "-Ivendor/whisper.cpp/ggml/include");
-    nob_cmd_append(&cmd, "-Ivendor/llama.cpp/include");
-    nob_cmd_append(&cmd, "-Ivendor/llama.cpp/ggml/include");
+    nob_cmd_append(&cmd, "-Ithirdparty/whisper.cpp/include");
+    nob_cmd_append(&cmd, "-Ithirdparty/whisper.cpp/ggml/include");
+    nob_cmd_append(&cmd, "-Ithirdparty/llama.cpp/include");
+    nob_cmd_append(&cmd, "-Ithirdparty/llama.cpp/ggml/include");
     nob_cmd_append(&cmd, "-I./");
     nob_cmd_append(&cmd, "-DLLAMA_SHARED");
     link_dynlibs(&cmd);
