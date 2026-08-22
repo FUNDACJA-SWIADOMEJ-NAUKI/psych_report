@@ -1,5 +1,5 @@
 #define NOB_IMPLEMENTATION
-#include "nob.h"
+#include "thirdparty/nob.h"
 
 #define BUILD_FOLDER "build/"
 #define SRC_FOLDER   "src/"
@@ -80,6 +80,7 @@ int main(int argc, char **argv) {
     nob_cc(&cmd);
     nob_cc_flags(&cmd);
     nob_cmd_append(&cmd, "-c");
+    nob_cmd_append(&cmd, "-Ithirdparty/");
     nob_cmd_append(&cmd, "-Ithirdparty/whisper.cpp/include");
     nob_cmd_append(&cmd, "-Ithirdparty/whisper.cpp/ggml/include");
     nob_cmd_append(&cmd, "-Ithirdparty/llama.cpp/include");
