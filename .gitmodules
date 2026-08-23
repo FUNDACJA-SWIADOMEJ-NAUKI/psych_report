@@ -1,6 +1,6 @@
 [submodule "thirdparty/whisper.cpp"]
-	path = thirdparty/whisper.cpp
+	path = psych_report_core/thirdparty/whisper.cpp
 	url = https://github.com/ggml-org/whisper.cpp.git
 [submodule "thirdparty/llama.cpp"]
-	path = thirdparty/llama.cpp
+	path = psych_report_core/thirdparty/llama.cpp
 	url = https://github.com/ggml-org/llama.cpp.git
