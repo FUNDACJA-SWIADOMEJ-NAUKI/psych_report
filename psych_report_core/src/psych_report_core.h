@@ -6,6 +6,11 @@ typedef struct {
   char* report;
 } ProcessingResult;
 
-int process_recording(const char *input_file_path, ProcessingResult *result);
+typedef struct {
+    const char* speech_to_text_model_path;
+    const char* llm_model_path;
+} ProcessingConfig;
+
+int process_recording(const char *input_file_path, ProcessingConfig config, ProcessingResult *result);
 
 #endif

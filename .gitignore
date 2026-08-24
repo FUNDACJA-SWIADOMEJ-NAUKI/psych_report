@@ -30,3 +30,4 @@ lib/
 *.app/
 
 models/
+psych_report

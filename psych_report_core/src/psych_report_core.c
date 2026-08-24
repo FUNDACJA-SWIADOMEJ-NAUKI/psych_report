@@ -16,11 +16,10 @@
 #define PROJECT_NAME "psych_report_core"
 #define RESPONSE_TOKENS_NUMBER 4000
 
-int call_llm(const char* prompt, char** result) {
+int call_llm(const char* prompt, const char *llm_model_path, char** result) {
   llama_backend_init();
   struct llama_model_params model_params = llama_model_default_params();
-  const char *model_path = "/home/mateusz/Projects/psych_report_core/models/Bielik-1.5B-v3.0-Instruct.Q8_0.gguf";
-  struct llama_model *model = llama_model_load_from_file(model_path, model_params);
+  struct llama_model *model = llama_model_load_from_file(llm_model_path, model_params);
 
   if (!model) {
     fprintf(stderr, "Error: Unable to load model\n");
@@ -49,7 +48,7 @@ int call_llm(const char* prompt, char** result) {
 
   // batches
 
-  struct llama_batch batch = llama_batch_init(prompt_tokens_number, 0, 1);  
+  struct llama_batch batch = llama_batch_init(prompt_tokens_number, 0, 1);
   for (int i = 0; i < prompt_tokens_number; i++) {
     batch.token[i] = prompt_tokens[i];
     batch.pos[i] = i;
@@ -121,7 +120,7 @@ int extract_audio(const char *input_file_path, float **pcm_buffer) {
   avformat_find_stream_info(input_format_context, NULL);
   int audio_stream_idx = av_find_best_stream(input_format_context, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
   AVStream *input_stream = input_format_context->streams[audio_stream_idx];
-  
+
   const AVCodec *decoder = avcodec_find_decoder(input_stream->codecpar->codec_id);
   AVCodecContext *decoder_context = avcodec_alloc_context3(decoder);
   avcodec_parameters_to_context(decoder_context, input_stream->codecpar);
@@ -153,7 +152,7 @@ int extract_audio(const char *input_file_path, float **pcm_buffer) {
         int out_count = swr_get_out_samples(swr, frame->nb_samples);
 
         if (total_samples + out_count > max_samples) {
-          max_samples = (total_samples + out_count) * 2 + 4096; 
+          max_samples = (total_samples + out_count) * 2 + 4096;
           *pcm_buffer = realloc(*pcm_buffer, max_samples * sizeof(float));
         }
         uint8_t *out_data[1] = { (uint8_t*)(*pcm_buffer + total_samples) };
@@ -190,10 +189,10 @@ int extract_audio(const char *input_file_path, float **pcm_buffer) {
   return total_samples;
 }
 
-int convert_speech_to_text(float *pcm_buffer, int total_samples, char **output) {
+int convert_speech_to_text(float *pcm_buffer, int total_samples, const char *whisper_model_path, char **output) {
   struct whisper_context_params context_params = whisper_context_default_params();
   context_params.use_gpu = true;
-  struct whisper_context *context = whisper_init_from_file_with_params("/home/mateusz/Projects/psych_report_core/models/ggml-large-v3-turbo-q5_0.bin", context_params);
+  struct whisper_context *context = whisper_init_from_file_with_params(whisper_model_path, context_params);
 
   struct whisper_full_params params = whisper_full_default_params(WHISPER_SAMPLING_BEAM_SEARCH);
   params.print_progress   = false;
@@ -218,7 +217,7 @@ int convert_speech_to_text(float *pcm_buffer, int total_samples, char **output) 
 
   *output = malloc(strlen(result) + 1);
   strcpy(*output, result);
-  
+
   // Clean up
   nob_sb_free(sb);
   whisper_free(context);
@@ -227,34 +226,34 @@ int convert_speech_to_text(float *pcm_buffer, int total_samples, char **output) 
 }
 
 
-int process_recording(const char *input_file_path, ProcessingResult *result) {
+int process_recording(const char *input_file_path, ProcessingConfig config, ProcessingResult *result) {
   float *pcm_buffer = NULL;
   int total_samples = extract_audio(input_file_path, &pcm_buffer);
- 
+
   printf("Successfully decoded %d samples into memory.\n", total_samples);
- 
+
   char *whisper_result = NULL;
-  convert_speech_to_text(pcm_buffer, total_samples, &whisper_result);
+  convert_speech_to_text(pcm_buffer, total_samples, config.speech_to_text_model_path, &whisper_result);
 
   // Llama part
   // ========================
 
   const char *initial_prompt = "<|im_start|> user\nPolicz ile jest słów w zapisie nagrania. Oto zapis:\n";
   const char *prompt_ending = "<|im_end|> \n<|im_start|> assistant\n";
-  char *prompt = malloc(strlen(initial_prompt) + strlen(whisper_result) + strlen(prompt_ending) + 1);  
+  char *prompt = malloc(strlen(initial_prompt) + strlen(whisper_result) + strlen(prompt_ending) + 1);
   strcpy(prompt, initial_prompt);
   strcat(prompt, whisper_result);
   strcat(prompt, prompt_ending);
   printf("%s\n", prompt);
-  
-  char *llm_result = NULL;
-  call_llm(prompt, &llm_result);
 
-  result->transcript = whisper_result; 
+  char *llm_result = NULL;
+  call_llm(prompt, config.llm_model_path, &llm_result);
+
+  result->transcript = whisper_result;
   result->report = llm_result;
-  
+
   free(prompt);
   free(pcm_buffer);
-  
-  return 0;  
+
+  return 0;
 }
