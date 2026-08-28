@@ -5,11 +5,14 @@
 #define SRC_FOLDER   "src/"
 #define THIRDPARTY_FOLDER "thirdparty/"
 
-bool build_whisper() {
+bool build_whisper(bool fresh) {
     bool result = true;
     nob_set_current_dir(THIRDPARTY_FOLDER"whisper.cpp");
     Nob_Cmd cmd = {0};
     nob_cmd_append(&cmd, "cmake", "-B", "build");
+    if (fresh) {
+        nob_cmd_append(&cmd, "--fresh");
+    }
     nob_cmd_append(&cmd, "-DWHISPER_BUILD_TESTS=0", "-DWHISPER_BUILD_EXAMPLES=0", "-DWHISPER_BUILD_SERVER=0");
     //    nob_cmd_append(&cmd, "-DGGML_VULKAN=1", "DGGML_AVX512=OFF");
     if (!nob_cmd_run(&cmd)) nob_return_defer(false);
@@ -25,11 +28,14 @@ bool build_whisper() {
         return result;
 }
 
-bool build_llama() {
+bool build_llama(bool fresh) {
     bool result = true;
     nob_set_current_dir(THIRDPARTY_FOLDER"llama.cpp");
     Nob_Cmd cmd = {0};
     nob_cmd_append(&cmd, "cmake", "-B", "build");
+    if (fresh) {
+        nob_cmd_append(&cmd, "--fresh");
+    }
     nob_cmd_append(&cmd, "-DLLAMA_BUILD_COMMON=0");
     if (!nob_cmd_run(&cmd)) nob_return_defer(false);
     nob_cmd_append(&cmd, "cmake", "--build", "build", "-j", "--config", "Release");
@@ -50,8 +56,8 @@ bool build_llama() {
         return result;
 }
 
-bool build_deps() {
-    return build_whisper() && build_llama();
+bool build_deps(bool fresh) {
+    return build_whisper(fresh) && build_llama(fresh);
 }
 
 void link_dynlibs(Nob_Cmd *cmd) {
@@ -75,7 +81,14 @@ void link_dynlibs(Nob_Cmd *cmd) {
 int main(int argc, char **argv) {
     NOB_GO_REBUILD_URSELF(argc, argv);
     if (!nob_mkdir_if_not_exists(BUILD_FOLDER)) return 1;
-    build_deps();
+
+    bool fresh = false;
+    if (argc > 1) {
+        const char *command = nob_shift(argv, argc);
+        fresh = strcmp(command, "fresh");
+    }
+
+    build_deps(fresh);
     Nob_Cmd cmd = {0};
     nob_cc(&cmd);
     nob_cc_flags(&cmd);
