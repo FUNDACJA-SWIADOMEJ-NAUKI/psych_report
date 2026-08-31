@@ -19,6 +19,7 @@
 int call_llm(const char* prompt, const char *llm_model_path, char** result) {
   llama_backend_init();
   struct llama_model_params model_params = llama_model_default_params();
+  model_params.n_gpu_layers = 999;
   struct llama_model *model = llama_model_load_from_file(llm_model_path, model_params);
 
   if (!model) {
@@ -42,7 +43,7 @@ int call_llm(const char* prompt, const char *llm_model_path, char** result) {
 
   // Initialize context
   struct llama_context_params context_params = llama_context_default_params();
-  context_params.n_ctx = prompt_tokens_number + 100;
+  context_params.n_ctx = prompt_tokens_number + RESPONSE_TOKENS_NUMBER;
   context_params.n_batch = prompt_tokens_number;
   struct llama_context *context = llama_init_from_model(model, context_params);
 
@@ -198,7 +199,6 @@ int convert_speech_to_text(float *pcm_buffer, int total_samples, const char *whi
   params.print_progress   = false;
   params.print_timestamps = false;
   params.no_timestamps    = true;
-  params.max_tokens       = 32;
   params.language         = "pl";
   params.temperature     = 0.4f;
   params.temperature_inc = 1.0f;

@@ -14,7 +14,7 @@ bool build_whisper(bool fresh) {
         nob_cmd_append(&cmd, "--fresh");
     }
     nob_cmd_append(&cmd, "-DWHISPER_BUILD_TESTS=0", "-DWHISPER_BUILD_EXAMPLES=0", "-DWHISPER_BUILD_SERVER=0");
-    //    nob_cmd_append(&cmd, "-DGGML_VULKAN=1", "DGGML_AVX512=OFF");
+    nob_cmd_append(&cmd, "-DGGML_VULKAN=1", "DGGML_AVX512=OFF");
     if (!nob_cmd_run(&cmd)) nob_return_defer(false);
     nob_cmd_append(&cmd, "cmake", "--build", "build", "-j", "--config", "Release");
     if (!nob_cmd_run(&cmd)) nob_return_defer(false);
@@ -37,6 +37,7 @@ bool build_llama(bool fresh) {
         nob_cmd_append(&cmd, "--fresh");
     }
     nob_cmd_append(&cmd, "-DLLAMA_BUILD_COMMON=0");
+    nob_cmd_append(&cmd, "-DGGML_VULKAN=1");
     if (!nob_cmd_run(&cmd)) nob_return_defer(false);
     nob_cmd_append(&cmd, "cmake", "--build", "build", "-j", "--config", "Release");
     if (!nob_cmd_run(&cmd)) nob_return_defer(false);
@@ -75,7 +76,7 @@ void link_dynlibs(Nob_Cmd *cmd) {
     nob_cmd_append(cmd, "-lllama");
     nob_cmd_append(cmd, "-DLLAMA_SHARED");
     nob_cmd_append(cmd, "-lstdc++");
-//    nob_cmd_append(&cmd, "-lggml-vulkan");
+    nob_cmd_append(cmd, "-lggml-vulkan");
 }
 
 int main(int argc, char **argv) {
