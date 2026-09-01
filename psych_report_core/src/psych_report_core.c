@@ -14,7 +14,7 @@
 #include "nob.h"
 
 #define PROJECT_NAME "psych_report_core"
-#define RESPONSE_TOKENS_NUMBER 4000
+#define RESPONSE_TOKENS_NUMBER 8000
 
 int call_llm(const char* prompt, const char *llm_model_path, char** result) {
   llama_backend_init();

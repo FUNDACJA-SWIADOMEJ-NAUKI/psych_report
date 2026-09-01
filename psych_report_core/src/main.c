@@ -7,7 +7,7 @@ int main(int argc, char **argv) {
   ProcessingResult result = {};
   ProcessingConfig config = {
     .speech_to_text_model_path = "/home/mateusz/Projects/psych_report/models/ggml-large-v3-turbo-q5_0.bin",
-    .llm_model_path = "/home/mateusz/Projects/psych_report/models/Bielik-1.5B-v3.0-Instruct.Q8_0.gguf"
+    .llm_model_path = "/home/mateusz/Projects/psych_report/models/minitron-Bielik-7B-v3.0-Instruct-GGUF.Q6_K.gguf"
   };
   process_recording(input_file, config, &result);
 
