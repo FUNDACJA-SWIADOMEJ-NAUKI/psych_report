@@ -29,6 +29,7 @@ type
     TProcessingConfig = record
       speech_to_text_model_path: PAnsiChar;
       llm_model_path: PAnsiChar;
+      prompt: PAnsiChar;
     end;
 
 function ProcessRecording(InputFilePath: PAnsiChar; Config: TProcessingConfig; out Result: TProcessingResult):cint32; cdecl; external name 'process_recording';

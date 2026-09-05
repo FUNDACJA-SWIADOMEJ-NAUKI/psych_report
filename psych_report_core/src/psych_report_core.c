@@ -238,10 +238,12 @@ int process_recording(const char *input_file_path, ProcessingConfig config, Proc
   // Llama part
   // ========================
 
-  const char *initial_prompt = "<|im_start|> user\nPolicz ile jest słów w zapisie nagrania. Oto zapis:\n";
+  const char *initial_prompt = "<|im_start|> user\n";
   const char *prompt_ending = "<|im_end|> \n<|im_start|> assistant\n";
-  char *prompt = malloc(strlen(initial_prompt) + strlen(whisper_result) + strlen(prompt_ending) + 1);
+  char *prompt = malloc(strlen(initial_prompt) + strlen(config.prompt)  + strlen(whisper_result) + strlen(prompt_ending) + 2);
   strcpy(prompt, initial_prompt);
+  strcat(prompt, config.prompt);
+  strcat(prompt, "\n");
   strcat(prompt, whisper_result);
   strcat(prompt, prompt_ending);
   printf("%s\n", prompt);

@@ -43,8 +43,9 @@ var
   Result: TProcessingResult;
 begin
   FProcessingConfig.speech_to_text_model_path := '/home/mateusz/Projects/psych_report/models/ggml-large-v3-turbo-q5_0.bin';
-  FProcessingConfig.llm_model_path := '/home/mateusz/Projects/psych_report/models/Bielik-1.5B-v3.0-Instruct.Q8_0.gguf';
-  ProcessRecording('/home/mateusz/Projects/test.mp4', FProcessingConfig, Result);
+  FProcessingConfig.llm_model_path := '/home/mateusz/Projects/psych_report/models/minitron-Bielik-7B-v3.0-Instruct-GGUF.Q6_K.gguf';
+  FProcessingConfig.prompt := 'Wciel się w rolę psychiatry i napisz dokładny raport ze spotkania z pacjentem. Nie pisz co robisz, napisz sam raport. Oto zapis rozmowy:';
+  ProcessRecording('/home/mateusz/Projects/wywiad psychiatr testowy 27.12.23.mp4', FProcessingConfig, Result);
   ShowMessage(Result.transcript);
   ShowMessage(Result.report);
 end;
