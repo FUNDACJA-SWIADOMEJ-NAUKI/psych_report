@@ -2,14 +2,14 @@ object MainForm: TMainForm
   Left = 342
   Height = 240
   Top = 250
-  Width = 320
+  Width = 600
   Caption = 'MainForm'
   ClientHeight = 240
-  ClientWidth = 320
+  ClientWidth = 600
   LCLVersion = '4.8.0.0'
   object SelectRecordingButton: TButton
     Left = 16
-    Height = 25
+    Height = 34
     Top = 56
     Width = 104
     Caption = 'Select recording'
@@ -25,15 +25,21 @@ object MainForm: TMainForm
     TabOrder = 1
     OnClick = RunButtonClick
   end
-  object Label1: TLabel
+  object Bevel1: TBevel
+    Left = 136
+    Height = 32
+    Top = 56
+    Width = 160
+  end
+  object RecordingFileNameLabel: TLabel
     Left = 144
     Height = 17
-    Top = 56
-    Width = 38
-    Caption = 'Label1'
+    Top = 64
+    Width = 143
+    Caption = 'RecordingFileNameLabel'
+    Visible = False
   end
   object OpenRecordingDialog: TOpenDialog
-    Left = 280
-    Top = 8
+    Left = 288
   end
 end
