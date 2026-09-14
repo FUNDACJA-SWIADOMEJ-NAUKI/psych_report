@@ -48,6 +48,19 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="PsychReportCore"/>
       </Unit>
+      <Unit>
+        <Filename Value="settings.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Settings"/>
+      </Unit>
+      <Unit>
+        <Filename Value="settingsform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="SettingsEditor"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

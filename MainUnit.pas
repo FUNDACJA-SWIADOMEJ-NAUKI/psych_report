@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, SQLite3Conn, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, PsychReportCore;
+  ExtCtrls, Menus, PsychReportCore, SettingsEditor;
 
 type
 
@@ -14,10 +14,13 @@ type
 
   TMainForm = class(TForm)
     Bevel1: TBevel;
+    MainMenu: TMainMenu;
+    SettingsMenuItem: TMenuItem;
     RecordingFileNameLabel: TLabel;
     SelectRecordingButton: TButton;
     RunButton: TButton;
     OpenRecordingDialog: TOpenDialog;
+    procedure SettingsMenuItemClick(Sender: TObject);
     procedure SelectRecordingButtonClick(Sender: TObject);
     procedure RunButtonClick(Sender: TObject);
   private
@@ -32,6 +35,8 @@ var
 
 implementation
 
+uses Settings;
+
 {$R *.lfm}
 
 { TMainForm }
@@ -41,16 +46,25 @@ begin
   if not(OpenRecordingDialog.Execute) then Exit;
   FRecordingFileName:= OpenRecordingDialog.FileName;
   RecordingFileNameLabel.Caption := FRecordingFileName;
-  RecordingFileNameLabel.Visible := True;
+  RecordingFileNameLabel.Visible := true;
+end;
+
+procedure TMainForm.SettingsMenuItemClick(Sender: TObject);
+var
+  SettingsForm: TSettingsForm;
+begin
+     SettingsForm := TSettingsForm.Create(Nil);
+     SettingsForm.ShowModal;
+     FreeAndNil(SettingsForm);
 end;
 
 procedure TMainForm.RunButtonClick(Sender: TObject);
 var
   Result: TProcessingResult;
 begin
-  FProcessingConfig.speech_to_text_model_path := '/home/mateusz/Projects/psych_report/models/ggml-large-v3-turbo-q5_0.bin';
-  FProcessingConfig.llm_model_path := '/home/mateusz/Projects/psych_report/models/minitron-Bielik-7B-v3.0-Instruct-GGUF.Q6_K.gguf';
-  FProcessingConfig.prompt := 'Wciel się w rolę psychiatry i napisz dokładny raport ze spotkania z pacjentem. Nie pisz co robisz, napisz sam raport. Oto zapis rozmowy:';
+  FProcessingConfig.speech_to_text_model_path := PChar(AppSettings.SpeechToTextModelPath);
+  FProcessingConfig.llm_model_path := PChar(AppSettings.LlmModelPath);
+  FProcessingConfig.prompt := PChar(AppSettings.Prompt);
   ProcessRecording(PChar(FRecordingFileName), FProcessingConfig, Result);
   ShowMessage(Result.transcript);
   ShowMessage(Result.report);

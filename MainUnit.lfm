@@ -4,8 +4,9 @@ object MainForm: TMainForm
   Top = 250
   Width = 600
   Caption = 'MainForm'
-  ClientHeight = 240
-  ClientWidth = 600
+  ClientHeight = 218
+  ClientWidth = 320
+  Menu = MainMenu
   LCLVersion = '4.8.0.0'
   object SelectRecordingButton: TButton
     Left = 16
@@ -41,5 +42,13 @@ object MainForm: TMainForm
   end
   object OpenRecordingDialog: TOpenDialog
     Left = 288
+  end
+  object MainMenu: TMainMenu
+    Left = 471
+    Top = 17
+    object SettingsMenuItem: TMenuItem
+      Caption = 'Settings'
+      OnClick = SettingsMenuItemClick
+    end
   end
 end
