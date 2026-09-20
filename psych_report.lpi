@@ -54,12 +54,40 @@
         <UnitName Value="Settings"/>
       </Unit>
       <Unit>
-        <Filename Value="settingsform.pas"/>
+        <Filename Value="settingseditorview.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="Form1"/>
+        <ComponentName Value="SettingsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="SettingsEditor"/>
+        <UnitName Value="SettingsEditorView"/>
+      </Unit>
+      <Unit>
+        <Filename Value="appinterfaces.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="AppInterfaces"/>
+      </Unit>
+      <Unit>
+        <Filename Value="recordingselectionpresenter.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="RecordingSelectionPresenter"/>
+      </Unit>
+      <Unit>
+        <Filename Value="recordingselectionframe.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="RecordingSelectionFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="RecordingSelectionFrame"/>
+      </Unit>
+      <Unit>
+        <Filename Value="coordinator.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Coordinator"/>
+      </Unit>
+      <Unit>
+        <Filename Value="settingseditorpresenter.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="SettingsEditorPresenter"/>
       </Unit>
     </Units>
   </ProjectOptions>

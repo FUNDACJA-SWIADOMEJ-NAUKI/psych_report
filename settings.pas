@@ -5,28 +5,21 @@ unit Settings;
 interface
 
 uses
-  Classes, SysUtils, IniFiles;
+  Classes, SysUtils, IniFiles, AppInterfaces;
 
 type
-  TSettings = class(TObject)
+  TSettings = class(TInterfacedObject, ISettings)
   private
     FSpeechToTextModelPath: string;
     FLlmModelPath: string;
     FPrompt: string;
-    FOnChanged: TNotifyEvent;
     procedure ReadSettings;
   public
-    property SpeechToTextModelPath: string
-      read FSpeechToTextModelPath write FSpeechToTextModelPath;
-    property LlmModelPath: string read FLlmModelPath write FLlmModelPath;
-    property Prompt: string read FPrompt write FPrompt;
-    property OnChanged: TNotifyEvent read FOnChanged write FOnChanged;
+    function GetSettings: TSettingsDTO;
+    procedure UpdateSettings(const NewSettings: TSettingsDTO);
     constructor Create;
     procedure SaveSettings;
   end;
-
-var
-  AppSettings: TSettings;
 
 implementation
 
@@ -53,6 +46,29 @@ begin
   end;
 end;
 
+function TSettings.GetSettings: TSettingsDTO;
+var
+  Settings: TSettingsDTO;
+begin
+  with Settings do
+  begin
+    SpeechToTextModelPath := FSpeechToTextModelPath;
+    LlmModelPath := FLlmModelPath;
+    Prompt := FPrompt;
+  end;
+  Result := Settings;
+end;
+
+procedure TSettings.UpdateSettings(const NewSettings: TSettingsDTO);
+begin
+  with NewSettings do
+  begin
+    FSpeechToTextModelPath := SpeechToTextModelPath;
+    FLlmModelPath := LlmModelPath;
+    FPrompt := Prompt;
+  end;
+end;
+
 procedure TSettings.SaveSettings;
 var
   SettingsIni: TIniFile;
@@ -65,21 +81,11 @@ begin
   finally
     SettingsIni.Free;
   end;
-
-  if Assigned(FOnChanged) then
-    FOnChanged(Self);
 end;
 
 constructor TSettings.Create;
 begin
-  inherited Create;
   ReadSettings;
 end;
-
-initialization
-  AppSettings := TSettings.Create;
-
-finalization
-  AppSettings.Free;
 
 end.

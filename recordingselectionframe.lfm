@@ -1,0 +1,42 @@
+object RecordingSelectionFrame: TRecordingSelectionFrame
+  Left = 0
+  Height = 240
+  Top = 0
+  Width = 326
+  ClientHeight = 240
+  ClientWidth = 326
+  LCLVersion = '4.8.0.0'
+  TabOrder = 0
+  DesignLeft = 342
+  DesignTop = 29
+  object SelectRecordingButton: TButton
+    Left = 16
+    Height = 34
+    Top = 56
+    Width = 104
+    Caption = 'Select recording'
+    TabOrder = 0
+    OnClick = SelectRecordingButtonClick
+  end
+  object RecordingFileNameLabel: TLabel
+    Left = 144
+    Height = 17
+    Top = 64
+    Width = 143
+    Caption = 'RecordingFileNameLabel'
+    Visible = False
+  end
+  object RunButton: TButton
+    Left = 120
+    Height = 25
+    Top = 208
+    Width = 75
+    Caption = 'Run'
+    TabOrder = 1
+    OnClick = RunButtonClick
+  end
+  object OpenRecordingDialog: TOpenDialog
+    Left = 176
+    Top = 8
+  end
+end

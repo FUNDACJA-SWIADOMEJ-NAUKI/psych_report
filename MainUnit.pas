@@ -5,29 +5,24 @@ unit MainUnit;
 interface
 
 uses
-  Classes, SysUtils, SQLite3Conn, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, Menus, PsychReportCore, SettingsEditor;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  ExtCtrls, Menus, PsychReportCore, AppInterfaces;
 
 type
 
   { TMainForm }
 
-  TMainForm = class(TForm)
-    Bevel1: TBevel;
+  TMainForm = class(TForm, IMainView)
     MainMenu: TMainMenu;
+    FramePanel: TPanel;
     SettingsMenuItem: TMenuItem;
-    RecordingFileNameLabel: TLabel;
-    SelectRecordingButton: TButton;
-    RunButton: TButton;
-    OpenRecordingDialog: TOpenDialog;
     procedure SettingsMenuItemClick(Sender: TObject);
-    procedure SelectRecordingButtonClick(Sender: TObject);
-    procedure RunButtonClick(Sender: TObject);
   private
-    FProcessingConfig: TProcessingConfig;
-    FRecordingFileName: string;
+    FDelegate: ICoordinatorDelegate;
   public
-
+    procedure SetDelegate(Delegate: ICoordinatorDelegate);
+    procedure ShowFrame(Frame: TObject);
+    procedure ShowMessageModal(const Message: string);
   end;
 
 var
@@ -35,40 +30,38 @@ var
 
 implementation
 
-uses Settings;
-
 {$R *.lfm}
 
 { TMainForm }
 
-procedure TMainForm.SelectRecordingButtonClick(Sender: TObject);
-begin
-  if not(OpenRecordingDialog.Execute) then Exit;
-  FRecordingFileName:= OpenRecordingDialog.FileName;
-  RecordingFileNameLabel.Caption := FRecordingFileName;
-  RecordingFileNameLabel.Visible := true;
-end;
-
 procedure TMainForm.SettingsMenuItemClick(Sender: TObject);
-var
-  SettingsForm: TSettingsForm;
 begin
-     SettingsForm := TSettingsForm.Create(Nil);
-     SettingsForm.ShowModal;
-     FreeAndNil(SettingsForm);
+  if Assigned(FDelegate) then FDelegate.OnSettingsMenuItemClicked;
 end;
 
-procedure TMainForm.RunButtonClick(Sender: TObject);
-var
-  Result: TProcessingResult;
+procedure TMainForm.SetDelegate(Delegate: ICoordinatorDelegate);
 begin
-  FProcessingConfig.speech_to_text_model_path := PChar(AppSettings.SpeechToTextModelPath);
-  FProcessingConfig.llm_model_path := PChar(AppSettings.LlmModelPath);
-  FProcessingConfig.prompt := PChar(AppSettings.Prompt);
-  ProcessRecording(PChar(FRecordingFileName), FProcessingConfig, Result);
-  ShowMessage(Result.transcript);
-  ShowMessage(Result.report);
+  FDelegate := Delegate;
+end;
+
+procedure TMainForm.ShowFrame(Frame: TObject);
+var
+  TargetFrame: TFrame;
+begin
+  if Frame is TFrame then
+  begin
+    TargetFrame := TFrame(Frame);
+    TargetFrame.Visible := False;
+    TargetFrame.Parent := FramePanel;
+    TargetFrame.Align := alClient;
+    TargetFrame.BringToFront;
+    TargetFrame.Visible := True;
+  end;
+end;
+
+procedure TMainForm.ShowMessageModal(const Message: string);
+begin
+  ShowMessage(Message);
 end;
 
 end.
-

@@ -51,7 +51,6 @@ object SettingsForm: TSettingsForm
     Top = 168
     Width = 296
     TabOrder = 4
-    OnChange = PromptChange
   end
   object SaveButton: TButton
     Left = 128
