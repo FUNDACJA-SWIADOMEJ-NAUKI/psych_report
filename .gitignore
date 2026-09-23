@@ -30,5 +30,7 @@ lib/
 *.app/
 
 models/
+release/
 psych_report
 settings.ini
+ppas.sh

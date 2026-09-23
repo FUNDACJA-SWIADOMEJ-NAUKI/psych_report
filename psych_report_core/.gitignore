@@ -41,3 +41,7 @@
 build/
 nob
 nob.old
+
+#premake5 output
+Makefile
+main.make
