@@ -48,7 +48,7 @@
             </Debugging>
             <Options>
               <PassLinkerOptions Value="True"/>
-              <LinkerOptions Value="-z origin -rpath=\$ORIGIN/psych_report_core/build"/>
+              <LinkerOptions Value="-z origin -rpath=/$ORIGIN/psych_report_core/build"/>
               <Win32>
                 <GraphicApplication Value="True"/>
               </Win32>
@@ -91,7 +91,7 @@
             <LinkSmart Value="True"/>
             <Options>
               <PassLinkerOptions Value="True"/>
-              <LinkerOptions Value="-z origin -rpath=\$ORIGIN"/>
+              <LinkerOptions Value="-z origin -rpath=/$ORIGIN"/>
               <Win32>
                 <GraphicApplication Value="True"/>
               </Win32>
@@ -100,7 +100,7 @@
           <Other>
             <CustomOptions Value="-Fo$(ProjPath)psych_report_core/build/obj"/>
             <ExecuteBefore>
-              <Command Value="instantfpc build_core.pas  ($ProjPath)  $(TargetOS) Release "/>
+              <Command Value="instantfpc build_core.pas ($ProjPath) $(TargetOS) Release"/>
               <ScanForFPCMsgs Value="True"/>
               <ShowAllMessages Value="True"/>
               <CompileReasons Compile="False" Run="False"/>
@@ -110,6 +110,55 @@
               <ScanForFPCMsgs Value="True"/>
               <ShowAllMessages Value="True"/>
               <CompileReasons Compile="False" Run="False"/>
+            </ExecuteAfter>
+          </Other>
+        </CompilerOptions>
+      </Item>
+      <Item Name="Release Windows">
+        <CompilerOptions>
+          <Version Value="11"/>
+          <Target>
+            <Filename Value="psych_report"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="$(ProjOutDir)"/>
+            <Libraries Value="$(ProjPath)psych_report_core/build;C:/Tools/w64devkit/lib/"/>
+            <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+          </SearchPaths>
+          <CodeGeneration>
+            <SmartLinkUnit Value="True"/>
+            <Optimizations>
+              <OptimizationLevel Value="3"/>
+            </Optimizations>
+          </CodeGeneration>
+          <Linking>
+            <Debugging>
+              <GenerateDebugInfo Value="False"/>
+              <RunWithoutDebug Value="True"/>
+              <StripSymbols Value="True"/>
+            </Debugging>
+            <LinkSmart Value="True"/>
+            <Options>
+              <PassLinkerOptions Value="True"/>
+              <LinkerOptions Value="-z origin -rpath=/$ORIGIN"/>
+              <Win32>
+                <GraphicApplication Value="True"/>
+              </Win32>
+            </Options>
+          </Linking>
+          <Other>
+            <CustomOptions Value="-Fo$(ProjPath)psych_report_core/build/obj"/>
+            <ExecuteBefore>
+              <Command Value="instantfpc build_core.pas ($ProjPath) $(TargetOS) Release"/>
+              <ScanForFPCMsgs Value="True"/>
+              <ShowAllMessages Value="True"/>
+              <CompileReasons Compile="False" Build="False" Run="False"/>
+            </ExecuteBefore>
+            <ExecuteAfter>
+              <Command Value="instantfpc assemble_release.pas"/>
+              <ScanForFPCMsgs Value="True"/>
+              <ShowAllMessages Value="True"/>
+              <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteAfter>
           </Other>
         </CompilerOptions>
@@ -206,7 +255,7 @@
       </Debugging>
       <Options>
         <PassLinkerOptions Value="True"/>
-        <LinkerOptions Value="-z origin -rpath=\$ORIGIN/psych_report_core/build"/>
+        <LinkerOptions Value="-z origin -rpath=/$ORIGIN/psych_report_core/build"/>
         <Win32>
           <GraphicApplication Value="True"/>
         </Win32>

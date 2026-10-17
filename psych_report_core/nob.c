@@ -5,6 +5,12 @@
 #define SRC_FOLDER   "src/"
 #define THIRDPARTY_FOLDER "thirdparty/"
 
+#ifdef _WIN32
+    #define LIB_EXT ".dll"
+#else
+    #define LIB_EXT ".so"
+#endif
+
 bool build_whisper(bool fresh) {
     bool result = true;
     nob_set_current_dir(THIRDPARTY_FOLDER"whisper.cpp");
@@ -19,9 +25,13 @@ bool build_whisper(bool fresh) {
     nob_cmd_append(&cmd, "cmake", "--build", "build", "-j", "--config", "Release");
     if (!nob_cmd_run(&cmd)) nob_return_defer(false);
     nob_set_current_dir("../..");
-    nob_copy_file(THIRDPARTY_FOLDER"whisper.cpp/build/src/libwhisper.so", BUILD_FOLDER"libwhisper.so");
-    nob_copy_file(THIRDPARTY_FOLDER"whisper.cpp/build/src/libwhisper.so.1", BUILD_FOLDER"libwhisper.so.1");
-    nob_copy_file(THIRDPARTY_FOLDER"whisper.cpp/build/src/libwhisper.so.1.8.4", BUILD_FOLDER"libwhisper.so.1.8.4");
+    #ifdef _WIN32
+        nob_copy_file(THIRDPARTY_FOLDER"whisper.cpp/build/bin/libwhisper.dll", BUILD_FOLDER"libwhisper.dll");
+    #else
+        nob_copy_file(THIRDPARTY_FOLDER"whisper.cpp/build/src/libwhisper.so", BUILD_FOLDER"libwhisper.so");
+        nob_copy_file(THIRDPARTY_FOLDER"whisper.cpp/build/src/libwhisper.so.1", BUILD_FOLDER"libwhisper.so.1");
+        nob_copy_file(THIRDPARTY_FOLDER"whisper.cpp/build/src/libwhisper.so.1.8.4", BUILD_FOLDER"libwhisper.so.1.8.4");
+    #endif
 
     defer:
         cmd_free(cmd);
@@ -67,8 +77,10 @@ void link_dynlibs(Nob_Cmd *cmd) {
     nob_cmd_append(cmd, "-lavutil");
     nob_cmd_append(cmd, "-lswresample");
     nob_cmd_append(cmd, "-Lbuild");
-    nob_cmd_append(cmd, "-Wl,-rpath,$ORIGIN");
-    nob_cmd_append(cmd, "-Wl,-z,origin");
+    #ifndef _WIN32
+        nob_cmd_append(cmd, "-Wl,-rpath,$ORIGIN");
+        nob_cmd_append(cmd, "-Wl,-z,origin");
+    #endif
     nob_cmd_append(cmd, "-lggml");
     nob_cmd_append(cmd, "-lggml-base");
     nob_cmd_append(cmd, "-lggml-cpu");
@@ -101,15 +113,19 @@ int main(int argc, char **argv) {
     nob_cmd_append(&cmd, "-Ithirdparty/llama.cpp/ggml/include");
     nob_cmd_append(&cmd, "-I./");
     nob_cmd_append(&cmd, "-DLLAMA_SHARED");
+    nob_cmd_append(&cmd, "-O2");
+    nob_cmd_append(&cmd, "-DNDEBUG");
     link_dynlibs(&cmd);
     nob_cc_inputs(&cmd, SRC_FOLDER "psych_report_core.c");
     nob_cc_output(&cmd, BUILD_FOLDER "psych_report_core.o");
     if (!nob_cmd_run(&cmd)) return 1;
     nob_cc(&cmd);
     nob_cc_flags(&cmd);
-    nob_cc_inputs(&cmd, SRC_FOLDER "main.c");
     nob_cc_inputs(&cmd, BUILD_FOLDER "psych_report_core.o");
-    nob_cc_output(&cmd, BUILD_FOLDER "main");
+    nob_cc_output(&cmd, BUILD_FOLDER "psych_report_core" LIB_EXT);
+    nob_cmd_append(&cmd, "-shared");
+    nob_cmd_append(&cmd, "-Wl,--export-all-symbols");
+    nob_cmd_append(&cmd, "-Wl,--enable-auto-import");
     link_dynlibs(&cmd);
     if (!nob_cmd_run(&cmd)) return 1;
 

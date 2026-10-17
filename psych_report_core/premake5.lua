@@ -75,15 +75,15 @@ workspace "PsychReportWorkspace"
                 "{MKDIR} build",
 
                 -- Build whisper.cpp
-                "cmake -B thirdparty/whisper.cpp/build -S thirdparty/whisper.cpp -DWHISPER_BUILD_TESTS=0 -DWHISPER_BUILD_EXAMPLES=0 -DWHISPER_BUILD_SERVER=0 -DGGML_VULKAN=1",
+                "cmake -B thirdparty/whisper.cpp/build -S thirdparty/whisper.cpp -DWHISPER_BUILD_TESTS=0 -DWHISPER_BUILD_EXAMPLES=0 -DWHISPER_BUILD_SERVER=0 -DGGML_VULKAN=1 -DBUILD_SHARED_LIBS=ON",
                 "cmake --build thirdparty/whisper.cpp/build --config Release",
-                "cmd /c copy /Y thirdparty\\whisper.cpp\\build\\src\\Release\\*.dll build\\",
-                "cmd /c copy /Y thirdparty\\whisper.cpp\\build\\src\\Release\\*.lib build\\",
+                "cmd /c copy /Y thirdparty\\whisper.cpp\\build\\bin\\*.dll build\\",
+                "cmd /c copy /Y thirdparty\\whisper.cpp\\build\\bin\\*.lib build\\",
 
                 -- Build llama.cpp
-                "cmake -B thirdparty/llama.cpp/build -S thirdparty/llama.cpp -DLLAMA_BUILD_COMMON=0 -DGGML_VULKAN=1",
+                "cmake -B thirdparty/llama.cpp/build -S thirdparty/llama.cpp -DLLAMA_BUILD_COMMON=0 -DGGML_VULKAN=1 -DBUILD_SHARED_LIBS=ON",
                 "cmake --build thirdparty/llama.cpp/build --config Release",
-                "cmd /c copy /Y thirdparty\\llama.cpp\\build\\bin\\Release\\* build\\"
+                "cmd /c copy /Y thirdparty\\llama.cpp\\build\\bin\\* build\\"
             }
 
         filter {}

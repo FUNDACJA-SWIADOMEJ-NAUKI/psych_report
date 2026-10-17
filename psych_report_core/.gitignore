@@ -41,6 +41,7 @@
 build/
 nob
 nob.old
+nob.exe.old
 
 #premake5 output
 Makefile
