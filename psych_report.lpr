@@ -18,7 +18,7 @@ uses
   AppInterfaces,
   RecordingSelectionPresenter,
   RecordingSelectionFrame,
-  Coordinator, SettingsEditorPresenter;
+  Coordinator, SettingsEditorPresenter, LoadingPresenter, LoadingFrame, ProcessRecordingThread;
 
   {$R *.res}
 

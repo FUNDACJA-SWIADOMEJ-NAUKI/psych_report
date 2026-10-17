@@ -5,14 +5,13 @@ unit Coordinator;
 interface
 
 uses
-  Classes, Forms, SysUtils, AppInterfaces, PsychReportCore, SettingsEditorView;
+  Classes, Forms, SysUtils, AppInterfaces, SettingsEditorView;
 
 type
   TCoordinator = class(TInterfacedObject, ICoordinatorDelegate)
   private
     FMainView: IMainView;
     FCurrentFrame: TFrame;
-    FProcessingConfig: TProcessingConfig;
     FSettings: ISettings;
     procedure SwitchFrame(NewFrame: TFrame);
   public
@@ -20,7 +19,8 @@ type
     destructor Destroy; override;
     procedure Start;
     procedure OnSettingsMenuItemClicked;
-    procedure OnRun(const RecordingPath: string);
+    procedure OnStartProcessingRecording(const RecordingPath: string);
+    procedure OnRecordingProcessed(const Report: string; const Transcript: string);
 
   end;
 
@@ -29,7 +29,7 @@ implementation
 { TCoordinator }
 
 uses Settings, RecordingSelectionPresenter, RecordingSelectionFrame,
-  SettingsEditorPresenter;
+  SettingsEditorPresenter, LoadingPresenter, LoadingFrame;
 
 procedure TCoordinator.SwitchFrame(NewFrame: TFrame);
 begin
@@ -75,21 +75,23 @@ begin
   View.Free;
 end;
 
-procedure TCoordinator.OnRun(const RecordingPath: string);
+procedure TCoordinator.OnStartProcessingRecording(const RecordingPath: string);
 var
-  Result: TProcessingResult;
+  View: TLoadingFrame;
+  Presenter: TLoadingPresenter;
 begin
-  with FSettings.GetSettings do
-  begin
-    FProcessingConfig.speech_to_text_model_path :=
-      PChar(SpeechToTextModelPath);
-    FProcessingConfig.llm_model_path := PChar(LlmModelPath);
-    FProcessingConfig.prompt := PChar(Prompt);
-    ProcessRecording(PChar(RecordingPath), FProcessingConfig, Result);
-    FMainView.ShowMessageModal(Result.transcript);
-    FMainView.ShowMessageModal(Result.report);
-  end;
+  View := TLoadingFrame.Create(nil);
+  Presenter := TLoadingPresenter.Create(View, Self, FSettings, RecordingPath);
+  View.SetPresenter(Presenter);
+  SwitchFrame(View);
+  Presenter.StartWork;
+end;
 
+procedure TCoordinator.OnRecordingProcessed(const Report: string;
+  const Transcript: string);
+begin
+  FMainView.ShowMessageModal(Transcript);
+  FMainView.ShowMessageModal(Report);
 end;
 
 end.

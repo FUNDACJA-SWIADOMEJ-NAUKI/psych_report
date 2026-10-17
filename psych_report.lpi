@@ -122,7 +122,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <Libraries Value="$(ProjPath)psych_report_core/build;C:/Tools/w64devkit/lib/"/>
+            <Libraries Value="$(ProjPath)psych_report_core/build;C:/Tools/w64devkit/lib"/>
             <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -236,6 +236,24 @@
         <Filename Value="settingseditorpresenter.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="SettingsEditorPresenter"/>
+      </Unit>
+      <Unit>
+        <Filename Value="loadingpresenter.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="LoadingPresenter"/>
+      </Unit>
+      <Unit>
+        <Filename Value="loadingframe.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="LoadingFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="LoadingFrame"/>
+      </Unit>
+      <Unit>
+        <Filename Value="processrecordingthread.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ProcessRecordingThread"/>
       </Unit>
     </Units>
   </ProjectOptions>

@@ -1,0 +1,20 @@
+object LoadingFrame: TLoadingFrame
+  Left = 0
+  Height = 240
+  Top = 0
+  Width = 320
+  ClientHeight = 240
+  ClientWidth = 320
+  LCLVersion = '4.8.0.0'
+  TabOrder = 0
+  DesignLeft = 342
+  DesignTop = 29
+  object ProgressBar: TProgressBar
+    Left = 112
+    Height = 20
+    Top = 112
+    Width = 100
+    Style = pbstMarquee
+    TabOrder = 0
+  end
+end

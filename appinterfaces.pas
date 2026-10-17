@@ -8,8 +8,9 @@ type
 
   ICoordinatorDelegate = interface
     ['{AA6E51B9-5C9A-44C4-8EA0-BDA92FC8F995}']
-    procedure OnRun(const RecordingPath: string);
+    procedure OnStartProcessingRecording(const RecordingPath: string);
     procedure OnSettingsMenuItemClicked;
+    procedure OnRecordingProcessed(const Report: string; const Transcript: string);
   end;
 
   IMainView = interface
@@ -25,6 +26,10 @@ type
     function GetFilePath: string;
     procedure SetFileNameLabel(const FilePath: string);
     procedure MakeFileNameLabelVisible;
+  end;
+
+  ILoadingView = interface
+    ['{C77C8173-3E2B-4247-9378-9E6B287AFC45}']
   end;
 
   TSettingsDTO = record

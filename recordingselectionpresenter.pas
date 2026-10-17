@@ -46,7 +46,7 @@ end;
 procedure TRecordingSelectionPresenter.OnRunButtonClicked(Sender: TObject);
 begin
   if Assigned(FDelegate) then
-    FDelegate.OnRun(FView.GetFilePath);
+    FDelegate.OnStartProcessingRecording(FView.GetFilePath);
 end;
 
 
