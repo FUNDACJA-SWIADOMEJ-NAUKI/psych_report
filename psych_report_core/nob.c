@@ -6,9 +6,9 @@
 #define THIRDPARTY_FOLDER "thirdparty/"
 
 #ifdef _WIN32
-    #define LIB_EXT ".dll"
+    #define LIB_NAME "psych_report_core.dll"
 #else
-    #define LIB_EXT ".so"
+    #define LIB_NAME "libpsych_report_core.so"
 #endif
 
 bool build_whisper(bool fresh) {
@@ -115,6 +115,9 @@ int main(int argc, char **argv) {
     nob_cmd_append(&cmd, "-DLLAMA_SHARED");
     nob_cmd_append(&cmd, "-O2");
     nob_cmd_append(&cmd, "-DNDEBUG");
+    #ifndef _WIND32
+        nob_cmd_append(&cmd, "-fPIC");
+    #endif
     link_dynlibs(&cmd);
     nob_cc_inputs(&cmd, SRC_FOLDER "psych_report_core.c");
     nob_cc_output(&cmd, BUILD_FOLDER "psych_report_core.o");
@@ -122,10 +125,12 @@ int main(int argc, char **argv) {
     nob_cc(&cmd);
     nob_cc_flags(&cmd);
     nob_cc_inputs(&cmd, BUILD_FOLDER "psych_report_core.o");
-    nob_cc_output(&cmd, BUILD_FOLDER "psych_report_core" LIB_EXT);
+    nob_cc_output(&cmd, BUILD_FOLDER LIB_NAME);
     nob_cmd_append(&cmd, "-shared");
-    nob_cmd_append(&cmd, "-Wl,--export-all-symbols");
-    nob_cmd_append(&cmd, "-Wl,--enable-auto-import");
+    #ifdef _WIN32
+        nob_cmd_append(&cmd, "-Wl,--export-all-symbols");
+        nob_cmd_append(&cmd, "-Wl,--enable-auto-import");
+    #endif
     link_dynlibs(&cmd);
     if (!nob_cmd_run(&cmd)) return 1;
 

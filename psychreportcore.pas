@@ -2,7 +2,6 @@ unit PsychReportCore;
 
 {$mode ObjFPC}{$H+}
 
-{$link psych_report_core.o}
 {$ifdef WINDOWS}
   {$linklib kernel32}
   {$linklib msvcrt}
@@ -26,16 +25,22 @@ unit PsychReportCore;
   {$linklib llama}
 {$endif}
 
-
-
-
 interface
 
 uses ctypes;
 
+const
+{$ifdef WINDOWS}
+  LibExtension = '.dll';
+{$endif}
+{$ifdef LINUX}
+  LibExtension = '.so';
+{$endif}
+
+
 type
   {$IFDEF FPC}
-            {$PACKRECORDS C}
+    {$PACKRECORDS C}
   {$ENDIF}
   TProcessingResult = record
     transcript: pansichar;     // consider using PWideChar; use wchar_t in C code
@@ -53,7 +58,7 @@ type
 {$endif}
 
 function ProcessRecording(InputFilePath: pansichar; Config: TProcessingConfig;
-  out Result: TProcessingResult): cint32; cdecl; external 'psych_report_core.dll' name 'process_recording';
+  out Result: TProcessingResult): cint32; cdecl; external 'psych_report_core' + LibExtension name 'process_recording';
 
 implementation
 
