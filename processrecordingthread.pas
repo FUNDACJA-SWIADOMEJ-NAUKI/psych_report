@@ -5,7 +5,7 @@ unit ProcessRecordingThread;
 interface
 
 uses
-  Classes, SysUtils, PsychReportCore, AppInterfaces;
+  Classes, SysUtils, PsychReportCore;
 
 type
   TProcessRecordingCompletedEvent = procedure(Result: TProcessingResult) of object;
@@ -37,7 +37,7 @@ end;
 procedure TProcessRecordingThread.Execute;
 begin
   ProcessRecording(PChar(FFilePath), FProcessingConfig, FResult);
-  if not Terminated then Synchronize(@SyncComplete);
+  if not Terminated then Queue(@SyncComplete);
 end;
 
 procedure TProcessRecordingThread.SyncComplete;

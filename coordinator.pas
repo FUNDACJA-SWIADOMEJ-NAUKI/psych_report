@@ -29,7 +29,8 @@ implementation
 { TCoordinator }
 
 uses Settings, RecordingSelectionPresenter, RecordingSelectionFrame,
-  SettingsEditorPresenter, LoadingPresenter, LoadingFrame;
+  SettingsEditorPresenter, LoadingPresenter, LoadingFrame,
+  ProcessingResultPresenter, ProcessingResultFrame;
 
 procedure TCoordinator.SwitchFrame(NewFrame: TFrame);
 begin
@@ -89,9 +90,14 @@ end;
 
 procedure TCoordinator.OnRecordingProcessed(const Report: string;
   const Transcript: string);
+var
+  View: TProcessingResultFrame;
+  Presenter: TProcessingResultPresenter;
 begin
-  FMainView.ShowMessageModal(Transcript);
-  FMainView.ShowMessageModal(Report);
+  View := TProcessingResultFrame.Create(nil);
+  Presenter := TProcessingResultPresenter.Create(View, Self, Report, Transcript);
+  View.SetPresenter(Presenter);
+  SwitchFrame(View);
 end;
 
 end.

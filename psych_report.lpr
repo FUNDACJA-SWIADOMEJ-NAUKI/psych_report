@@ -10,15 +10,10 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms,
-  MainUnit,
-  PsychReportCore,
-  Settings,
-  SettingsEditorView,
-  AppInterfaces,
-  RecordingSelectionPresenter,
-  RecordingSelectionFrame,
-  Coordinator, SettingsEditorPresenter, LoadingPresenter, LoadingFrame, ProcessRecordingThread;
+  Forms, MainUnit, PsychReportCore, Settings, SettingsEditorView, AppInterfaces,
+  RecordingSelectionPresenter, RecordingSelectionFrame, Coordinator,
+  SettingsEditorPresenter, LoadingPresenter, LoadingFrame,
+  ProcessRecordingThread, ProcessingResultPresenter, ProcessingResultFrame;
 
   {$R *.res}
 

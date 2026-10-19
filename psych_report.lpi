@@ -255,6 +255,19 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="ProcessRecordingThread"/>
       </Unit>
+      <Unit>
+        <Filename Value="processingresultpresenter.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ProcessingResultPresenter"/>
+      </Unit>
+      <Unit>
+        <Filename Value="processingresultframe.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ProcessingResultFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="ProcessingResultFrame"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

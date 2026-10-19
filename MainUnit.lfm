@@ -1,18 +1,25 @@
 object MainForm: TMainForm
   Left = 342
-  Height = 279
+  Height = 768
   Top = 250
-  Width = 600
+  Width = 1000
   Caption = 'MainForm'
-  ClientHeight = 218
-  ClientWidth = 320
+  ClientHeight = 746
+  ClientWidth = 1000
   Menu = MainMenu
   LCLVersion = '4.8.0.0'
   object FramePanel: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 258
+    Height = 746
     Top = 0
-    Width = 600
+    Width = 1000
+    Anchors = [akTop, akLeft, akRight, akBottom]
     TabOrder = 0
   end
   object MainMenu: TMainMenu

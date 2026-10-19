@@ -32,6 +32,12 @@ type
     ['{C77C8173-3E2B-4247-9378-9E6B287AFC45}']
   end;
 
+  IProcessingResultView = interface
+    ['{4E6EAFC1-35C0-4406-8E0B-AB74F77FB98D}']
+    function GetCurrentTab: string;
+    procedure ShowText(ReportPart: string);
+  end;
+
   TSettingsDTO = record
     SpeechToTextModelPath: string;
     LlmModelPath: string;
