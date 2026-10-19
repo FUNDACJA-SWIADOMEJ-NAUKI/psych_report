@@ -39,6 +39,7 @@ object ProcessingResultFrame: TProcessingResultFrame
       Lines.Strings = (
         'ResultMemo'
       )
+      ReadOnly = True
       ScrollBars = ssAutoVertical
       TabOrder = 1
     end
