@@ -20,6 +20,7 @@ type
       Report: string; Transcript: string);
     procedure OnTabChanged;
     procedure OnCopyButtonClicked;
+    procedure OnResetButtonClicked;
   end;
 
 implementation
@@ -62,6 +63,11 @@ var
 begin
   CurrentTab := FView.GetCurrentTab;
   Clipboard.AsText := GetResultPart(CurrentTab);
+end;
+
+procedure TProcessingResultPresenter.OnResetButtonClicked;
+begin
+  FDelegate.Reset;
 end;
 
 end.

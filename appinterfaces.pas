@@ -11,6 +11,7 @@ type
     procedure OnStartProcessingRecording(const RecordingPath: string);
     procedure OnSettingsMenuItemClicked;
     procedure OnRecordingProcessed(const Report: string; const Transcript: string);
+    procedure Reset;
   end;
 
   IMainView = interface

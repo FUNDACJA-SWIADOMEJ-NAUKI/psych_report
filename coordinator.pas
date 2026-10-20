@@ -21,7 +21,7 @@ type
     procedure OnSettingsMenuItemClicked;
     procedure OnStartProcessingRecording(const RecordingPath: string);
     procedure OnRecordingProcessed(const Report: string; const Transcript: string);
-
+    procedure Reset;
   end;
 
 implementation
@@ -98,6 +98,11 @@ begin
   Presenter := TProcessingResultPresenter.Create(View, Self, Report, Transcript);
   View.SetPresenter(Presenter);
   SwitchFrame(View);
+end;
+
+procedure TCoordinator.Reset;
+begin
+  Start;
 end;
 
 end.

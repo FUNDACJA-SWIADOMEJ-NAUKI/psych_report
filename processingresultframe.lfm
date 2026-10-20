@@ -57,6 +57,15 @@ object ProcessingResultFrame: TProcessingResultFrame
     ImageIndex = 0
     OnClick = CopyButtonClick
   end
+  object ResetButton: TButton
+    Left = 392
+    Height = 25
+    Top = 688
+    Width = 75
+    Caption = 'New report'
+    TabOrder = 1
+    OnClick = ResetButtonClick
+  end
   object CopyIconList: TImageList
     Scaled = True
     Left = 928
